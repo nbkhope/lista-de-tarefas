@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 40
+    height: 40,
+    backgroundColor: '#fff',
   },
   headerText: {
     fontWeight: 'bold',
