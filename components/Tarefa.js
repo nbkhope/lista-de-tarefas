@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 class Tarefa extends Component {
   render() {
     return (
-      <View>
-        <Text>{this.props.tarefa.texto}</Text>
+      <View style={styles.tarefaView}>
+        <Text style={styles.tarefaText}>• {this.props.tarefa.texto}</Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  tarefaView: { marginBottom: 6 },
+  tarefaText: { fontSize: 16 },
+});
 
 export default Tarefa;
