@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar, Button, ScrollView } from 'react-native';
 
 import Header from './components/Header';
 import ListaTarefas from './components/ListaTarefas';
@@ -12,11 +12,18 @@ class App extends React.Component {
     this.state = {
       tarefas: null,
       tarefasCarregando: false,
+      tarefasErro: null,
     };
+
+    this.onTentarNovamentePress = this.onTentarNovamentePress.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ tarefasCarregando: true }, () => {
+    this.fetchData();
+  }
+
+  fetchData() {
+    this.setState({ tarefasCarregando: true, tarefasErro: null }, () => {
       this.props.fetchTarefas()
         .then(tarefas => {
           this.setState({
@@ -25,13 +32,30 @@ class App extends React.Component {
           });
         })
         .catch(error => {
-          console.error(error);
+          this.setState({
+            tarefasErro: `Houve um erro ao requerer as tarefas: ${error.message}`
+          });
         });
     });
   }
 
+  onTentarNovamentePress() {
+    this.fetchData();
+  }
+
   renderListaTarefas() {
-    if (this.state.tarefas) {
+    if (this.state.tarefasErro) {
+      return (
+        <View>
+          <Text style={{ color: '#ff0000' }}>{this.state.tarefasErro}</Text>
+          <Button
+            onPress={this.onTentarNovamentePress}
+            title="Tentar Novamente"
+          />
+        </View>
+      );
+    }
+    else if (this.state.tarefas) {
       return <ListaTarefas tarefas={this.state.tarefas} />;
     }
 
@@ -41,12 +65,12 @@ class App extends React.Component {
   render() {
     console.log(this.props);
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Header>Tarefas</Header>
         <View style={styles.main}>
           {this.renderListaTarefas()}
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
