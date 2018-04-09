@@ -15,7 +15,9 @@ const CampoTarefa = (props) => {
         value={props.value}
         onChangeText={props.onChangeText}
       />
-
+      <TouchableOpacity onPress={props.onTarefaAdd}>
+        <Text>+</Text>
+      </TouchableOpacity>
     </View>
   );
 };

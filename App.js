@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Platform, StatusBar, Button, ScrollView } from 
 import Header from './components/Header';
 import CampoTarefa from './components/CampoTarefa';
 import ListaTarefas from './components/ListaTarefas';
-import { fetchTarefas } from './api';
+import { fetchTarefas, createTarefa } from './api';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class App extends React.Component {
 
     this.onTentarNovamentePress = this.onTentarNovamentePress.bind(this);
     this.onTarefaChange = this.onTarefaChange.bind(this);
+    this.onTarefaAdd = this.onTarefaAdd.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +51,16 @@ class App extends React.Component {
     this.setState({ tarefaNova: texto });
   }
 
+  onTarefaAdd() {
+    this.props.createTarefa({ texto: this.state.tarefaNova })
+      .then(tarefa => {
+        this.setState({
+          tarefas: this.state.tarefas.concat(tarefa),
+          tarefaNova: '',
+        });
+      });
+  }
+
   renderListaTarefas() {
     if (this.state.tarefasErro) {
       return (
@@ -78,6 +89,7 @@ class App extends React.Component {
           <CampoTarefa
             value={this.state.tarefaNova}
             onChangeText={this.onTarefaChange}
+            onTarefaAdd={this.onTarefaAdd}
           />
           {this.renderListaTarefas()}
         </View>
@@ -103,6 +115,7 @@ export default (props) => {
     <App
       {...props}
       fetchTarefas={fetchTarefas}
+      createTarefa={createTarefa}
     />
   );
 }
