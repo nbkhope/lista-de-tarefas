@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar, Button, ScrollView } from 'react-native';
 
 import Header from './components/Header';
+import CampoTarefa from './components/CampoTarefa';
 import ListaTarefas from './components/ListaTarefas';
 import { fetchTarefas } from './api';
 
@@ -13,9 +14,11 @@ class App extends React.Component {
       tarefas: null,
       tarefasCarregando: false,
       tarefasErro: null,
+      tarefaNova: '',
     };
 
     this.onTentarNovamentePress = this.onTentarNovamentePress.bind(this);
+    this.onTarefaChange = this.onTarefaChange.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +46,10 @@ class App extends React.Component {
     this.fetchData();
   }
 
+  onTarefaChange(texto) {
+    this.setState({ tarefaNova: texto });
+  }
+
   renderListaTarefas() {
     if (this.state.tarefasErro) {
       return (
@@ -68,6 +75,10 @@ class App extends React.Component {
       <ScrollView style={styles.container}>
         <Header>Tarefas</Header>
         <View style={styles.main}>
+          <CampoTarefa
+            value={this.state.tarefaNova}
+            onChangeText={this.onTarefaChange}
+          />
           {this.renderListaTarefas()}
         </View>
       </ScrollView>
