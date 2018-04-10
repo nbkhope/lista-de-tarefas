@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar, Button, ScrollView } from 'react-native';
 
 import Header from './components/Header';
-import CampoTarefa from './components/CampoTarefa';
+import NovaTarefa from './components/NovaTarefa';
 import ListaTarefas from './components/ListaTarefas';
 import { fetchTarefas, createTarefa } from './api';
 
@@ -15,6 +15,7 @@ class App extends React.Component {
       tarefasCarregando: false,
       tarefasErro: null,
       tarefaNova: '',
+      tarefaNovaErro: null,
     };
 
     this.onTentarNovamentePress = this.onTentarNovamentePress.bind(this);
@@ -52,13 +53,27 @@ class App extends React.Component {
   }
 
   onTarefaAdd() {
-    this.props.createTarefa({ texto: this.state.tarefaNova })
-      .then(tarefa => {
-        this.setState({
-          tarefas: this.state.tarefas.concat(tarefa),
-          tarefaNova: '',
-        });
+    if (this.state.tarefaNova.length > 0) {
+      this.setState({ tarefaNovaErro: null }, () => {
+        this.props.createTarefa({ texto: this.state.tarefaNova })
+          .then(tarefa => {
+            this.setState({
+              tarefas: this.state.tarefas.concat(tarefa),
+              tarefaNova: '',
+            });
+          })
+          .catch(error => {
+            this.setState({
+              tarefaNovaErro: `Falha ao criar nova tarefa: ${error.message}`
+            });
+          });
       });
+    }
+    else {
+      this.setState({
+        tarefaNovaErro: 'O texto da tarefa não pode ser vazio'
+      });
+    }
   }
 
   renderListaTarefas() {
@@ -81,15 +96,15 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <ScrollView style={styles.container}>
         <Header>Tarefas</Header>
         <View style={styles.main}>
-          <CampoTarefa
+          <NovaTarefa
             value={this.state.tarefaNova}
             onChangeText={this.onTarefaChange}
             onTarefaAdd={this.onTarefaAdd}
+            error={this.state.tarefaNovaErro}
           />
           {this.renderListaTarefas()}
         </View>
