@@ -1,9 +1,6 @@
 import React from 'react';
 import {
-  View,
-  Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 
@@ -13,17 +10,12 @@ const CampoTarefa = (props) => {
     textInputStyle.push(styles.error);
   }
   return (
-    <View>
-      <TextInput
-        style={textInputStyle}
-        value={props.value}
-        onChangeText={props.onChangeText}
-        maxLength={64}
-      />
-      <TouchableOpacity onPress={props.onTarefaAdd}>
-        <Text>+</Text>
-      </TouchableOpacity>
-    </View>
+    <TextInput
+      style={textInputStyle}
+      value={props.value}
+      onChangeText={props.onChangeText}
+      maxLength={64}
+    />
   );
 };
 
