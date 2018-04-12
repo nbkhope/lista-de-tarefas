@@ -12,12 +12,15 @@ const NovaTarefa = (props) => {
           <CampoTarefa
             value={props.value}
             onChangeText={props.onChangeText}
-            onTarefaAdd={props.onTarefaAdd}
             error={!!props.error}
           />
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActionButton content="+" onPress={props.onTarefaAdd} />
+          <ActionButton
+            content="+"
+            onPress={props.onTarefaAdd}
+            loading={props.loading}
+          />
         </View>
       </View>
 

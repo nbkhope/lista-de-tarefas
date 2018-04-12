@@ -4,7 +4,12 @@ import { View, Text, StyleSheet, Platform, StatusBar, Button, ScrollView } from 
 import Header from './components/Header';
 import NovaTarefa from './components/NovaTarefa';
 import ListaTarefas from './components/ListaTarefas';
-import { fetchTarefas, createTarefa } from './api';
+import {
+  fetchTarefas,
+  createTarefa,
+  updateTarefa,
+  deleteTarefa,
+} from './api';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,11 +21,14 @@ class App extends React.Component {
       tarefasErro: null,
       tarefaNova: '',
       tarefaNovaErro: null,
+      tarefaNovaCarregando: false,
     };
 
     this.onTentarNovamentePress = this.onTentarNovamentePress.bind(this);
     this.onTarefaChange = this.onTarefaChange.bind(this);
     this.onTarefaAdd = this.onTarefaAdd.bind(this);
+    this.onTarefaUpdate = this.onTarefaUpdate.bind(this);
+    this.onTarefaRemove = this.onTarefaRemove.bind(this);
   }
 
   componentDidMount() {
@@ -54,17 +62,19 @@ class App extends React.Component {
 
   onTarefaAdd() {
     if (this.state.tarefaNova.length > 0) {
-      this.setState({ tarefaNovaErro: null }, () => {
+      this.setState({ tarefaNovaErro: null, tarefaNovaCarregando: true }, () => {
         this.props.createTarefa({ texto: this.state.tarefaNova })
           .then(tarefa => {
             this.setState({
               tarefas: this.state.tarefas.concat(tarefa),
               tarefaNova: '',
+              tarefaNovaCarregando: false,
             });
           })
           .catch(error => {
             this.setState({
-              tarefaNovaErro: `Falha ao criar nova tarefa: ${error.message}`
+              tarefaNovaErro: `Falha ao criar nova tarefa: ${error.message}`,
+              tarefaNovaCarregando: false,
             });
           });
       });
@@ -74,6 +84,32 @@ class App extends React.Component {
         tarefaNovaErro: 'O texto da tarefa não pode ser vazio'
       });
     }
+  }
+
+  onTarefaUpdate(updatedTarefa) {
+    return this.props.updateTarefa(updatedTarefa)
+      .then(tarefaAtualizada => {
+        const listaAtualizada = this.state.tarefas.map(tarefa => {
+          if (tarefa.id === tarefaAtualizada.id) {
+            return tarefaAtualizada;
+          }
+
+          return tarefa;
+        });
+
+        this.setState({ tarefas: listaAtualizada });
+
+        return tarefaAtualizada;
+      });
+  }
+
+  onTarefaRemove(tarefaId) {
+    return this.props.deleteTarefa(tarefaId)
+      .then(() => {
+        this.setState({
+          tarefas: this.state.tarefas.filter(tarefa => tarefa.id !== tarefaId)
+        });
+      });
   }
 
   renderListaTarefas() {
@@ -89,7 +125,13 @@ class App extends React.Component {
       );
     }
     else if (this.state.tarefas) {
-      return <ListaTarefas tarefas={this.state.tarefas} />;
+      return (
+        <ListaTarefas
+          tarefas={this.state.tarefas}
+          onTarefaUpdate={this.onTarefaUpdate}
+          onTarefaRemove={this.onTarefaRemove}
+        />
+      );
     }
 
     return <Text>Carregando tarefas...</Text>;
@@ -105,6 +147,7 @@ class App extends React.Component {
             onChangeText={this.onTarefaChange}
             onTarefaAdd={this.onTarefaAdd}
             error={this.state.tarefaNovaErro}
+            loading={this.state.tarefaNovaCarregando}
           />
           {this.renderListaTarefas()}
         </View>
@@ -131,6 +174,8 @@ export default (props) => {
       {...props}
       fetchTarefas={fetchTarefas}
       createTarefa={createTarefa}
+      updateTarefa={updateTarefa}
+      deleteTarefa={deleteTarefa}
     />
   );
 }

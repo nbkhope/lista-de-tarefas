@@ -3,8 +3,8 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const ActionButton = (props) => {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.touchable}>
-      <Text>{props.content}</Text>
+    <TouchableOpacity onPress={props.onPress} style={styles.touchable} disabled={props.loading}>
+      <Text>{props.loading ? '↻' : props.content}</Text>
     </TouchableOpacity>
   );
 };
