@@ -1,3 +1,9 @@
+# Projeto 4: Lista de Tarefas
+
+Este projeto é parte do curso **Aplicativos Móveis com o React Native**, criado por Renan Martins (@nbkhope). [Clique aqui para visualizar o curso](https://www.udemy.com/aplicativos-moveis-com-o-react-native).
+
+---
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
