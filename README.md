@@ -1,6 +1,6 @@
 # Projeto 4: Lista de Tarefas
 
-Este projeto é parte do curso **Aplicativos Móveis com o React Native**, criado por Renan Martins (@nbkhope). [Clique aqui para visualizar o curso](https://www.udemy.com/aplicativos-moveis-com-o-react-native).
+Este projeto é parte do curso **Aplicativos Móveis com o React Native**. [Clique aqui para visualizar o curso](https://www.udemy.com/aplicativos-moveis-com-o-react-native).
 
 ---
 
