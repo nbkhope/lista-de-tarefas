@@ -1,5 +1,7 @@
+const baseUrl = 'http://localhost:3000';
+
 export const fetchTarefas = () => {
-  return fetch('http://localhost:3000/tarefas')
+  return fetch(`${baseUrl}/tarefas`)
     .then(response => {
       return response.json();
     });
@@ -7,7 +9,7 @@ export const fetchTarefas = () => {
 
 // POST /tarefas, { texto: 'Nova tarefa' }
 export const createTarefa = (tarefa) => {
-  return fetch('http://localhost:3000/tarefas', {
+  return fetch(`${baseUrl}/tarefas`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -19,7 +21,7 @@ export const createTarefa = (tarefa) => {
 };
 
 export const updateTarefa = (tarefa) => {
-  return fetch(`http://localhost:3000/tarefas/${tarefa.id}`, {
+  return fetch(`${baseUrl}/tarefas/${tarefa.id}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -32,7 +34,7 @@ export const updateTarefa = (tarefa) => {
 
 // DELETE /tarefas/:tarefaId
 export const deleteTarefa = (tarefaId) => {
-  return fetch(`http://localhost:3000/tarefas/${tarefaId}`, {
+  return fetch(`${baseUrl}/tarefas/${tarefaId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
